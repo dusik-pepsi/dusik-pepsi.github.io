@@ -70,20 +70,20 @@
             border-radius: 60% 60% 0 0 / 100% 100% 0 0;
             z-index: 10;
         }
-        /* Разбрызгиватель */
+
         .sprinkler-unit {
             position: absolute;
             bottom: 55px;
             left: 50%;
             transform: translateX(-50%);
             z-index: 5;
-            animation: popUpCycle 7s infinite ease-in-out;
+            animation: popUpCycle 6s infinite ease-in-out;
         }
         @keyframes popUpCycle {
             0% { transform: translateX(-50%) translateY(35px); }
-            14% { transform: translateX(-50%) translateY(0); }
-            57% { transform: translateX(-50%) translateY(0); }
-            71% { transform: translateX(-50%) translateY(35px); }
+            16.6% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(0); }
+            66.6% { transform: translateX(-50%) translateY(35px); }
             100% { transform: translateX(-50%) translateY(35px); }
         }
         .sprinkler-body {
@@ -108,15 +108,15 @@
             border-radius: 6px 6px 4px 4px;
             margin: 0 auto;
             position: relative; top: -12px;
-            animation: headWobble 7s infinite ease-in-out;
+            animation: headWobble 6s infinite ease-in-out;
             transform-origin: center bottom;
         }
         @keyframes headWobble {
             0% { transform: rotate(0deg); }
-            14% { transform: rotate(0deg); }
-            28% { transform: rotate(-15deg); }
-            42% { transform: rotate(15deg); }
-            57% { transform: rotate(0deg); }
+            16.6% { transform: rotate(0deg); }
+            33% { transform: rotate(-15deg); }
+            50% { transform: rotate(15deg); }
+            66.6% { transform: rotate(0deg); }
             100% { transform: rotate(0deg); }
         }
         .nozzle {
@@ -131,7 +131,7 @@
             box-shadow: 0 0 10px rgba(79,195,247,0.6);
         }
 
-        /* ===== СТРУИ ВОДЫ (ТЕПЕРЬ РЕАЛЬНО НИСХОДЯЩИЕ) ===== */
+        /* ===== СТРУИ ВОДЫ ===== */
         .water-streams {
             position: absolute;
             bottom: 0; left: 0;
@@ -149,18 +149,13 @@
             border-radius: 50%;
             transform-origin: center bottom;
             opacity: 0;
-            animation: streamArc 2.5s ease-out forwards;
+            animation: streamArc 2.5s infinite ease-out;
         }
-        /*
-          Нисходящая траектория:
-          Струя сначала поднимается вверх и в сторону, потом плавно опускается вниз.
-          За счёт смещения left и изменения высоты создаётся эффект дуги.
-        */
         @keyframes streamArc {
             0% { height: 0px; opacity: 1; left: 150px; }
-            15% { height: 100px; opacity: 0.9; left: 140px; }
-            40% { height: 180px; opacity: 0.6; left: 130px; }
-            70% { height: 150px; opacity: 0.3; left: 140px; }
+            15% { height: 100px; opacity: 0.9; left: 135px; }
+            40% { height: 180px; opacity: 0.6; left: 120px; }
+            70% { height: 140px; opacity: 0.3; left: 135px; }
             100% { height: 0px; opacity: 0; left: 160px; }
         }
         .stream:nth-child(1) { transform: rotate(-50deg); animation-delay: 1.0s; }

@@ -15,35 +15,6 @@
         }
         a { text-decoration: none; color: inherit; }
 
-        .bg-drops {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            pointer-events: none;
-            z-index: 0;
-            overflow: hidden;
-        }
-        .bg-drop {
-            position: absolute;
-            width: 3px; height: 8px;
-            background: linear-gradient(180deg, rgba(79,195,247,0.15), rgba(79,195,247,0.03));
-            border-radius: 50%;
-            opacity: 0;
-            animation: bgDrop 6s infinite ease-in-out;
-        }
-        .bg-drop:nth-child(1) { left: 10%; top: 10%; animation-delay: 0s; }
-        .bg-drop:nth-child(2) { left: 30%; top: 50%; animation-delay: 2s; }
-        .bg-drop:nth-child(3) { left: 55%; top: 20%; animation-delay: 4s; }
-        .bg-drop:nth-child(4) { left: 75%; top: 60%; animation-delay: 1s; }
-        .bg-drop:nth-child(5) { left: 90%; top: 35%; animation-delay: 3s; }
-        .bg-drop:nth-child(6) { left: 20%; top: 80%; animation-delay: 5s; }
-        @keyframes bgDrop {
-            0% { transform: translateY(-20px); opacity: 0; }
-            20% { opacity: 0.15; }
-            80% { opacity: 0.15; }
-            100% { transform: translateY(100vh); opacity: 0; }
-        }
-
         header {
             background: white;
             box-shadow: 0 2px 20px rgba(0,0,0,0.05);
@@ -106,21 +77,14 @@
             left: 50%;
             transform: translateX(-50%);
             z-index: 5;
-            /*
-              Цикл анимации: 8 секунд.
-              0-1.5с: подъём
-              1.5-5с: стоит на месте (полив)
-              5-6.5с: опускание
-              6.5-8с: пауза
-            */
-            animation: popUpCycle 8s infinite ease-in-out;
+            animation: popUpCycle 7s infinite ease-in-out;
         }
         @keyframes popUpCycle {
-            0% { transform: translateX(-50%) translateY(30px); }
-            18.75% { transform: translateX(-50%) translateY(0); }
-            62.5% { transform: translateX(-50%) translateY(0); }
-            81.25% { transform: translateX(-50%) translateY(30px); }
-            100% { transform: translateX(-50%) translateY(30px); }
+            0% { transform: translateX(-50%) translateY(35px); }
+            14% { transform: translateX(-50%) translateY(0); }
+            57% { transform: translateX(-50%) translateY(0); }
+            71% { transform: translateX(-50%) translateY(35px); }
+            100% { transform: translateX(-50%) translateY(35px); }
         }
         .sprinkler-body {
             width: 55px; height: 100px;
@@ -144,16 +108,15 @@
             border-radius: 6px 6px 4px 4px;
             margin: 0 auto;
             position: relative; top: -12px;
-            animation: headWobble 8s infinite ease-in-out;
+            animation: headWobble 7s infinite ease-in-out;
             transform-origin: center bottom;
         }
         @keyframes headWobble {
             0% { transform: rotate(0deg); }
-            18.75% { transform: rotate(0deg); }
-            30% { transform: rotate(-12deg); }
-            45% { transform: rotate(12deg); }
-            55% { transform: rotate(-12deg); }
-            62.5% { transform: rotate(0deg); }
+            14% { transform: rotate(0deg); }
+            28% { transform: rotate(-15deg); }
+            42% { transform: rotate(15deg); }
+            57% { transform: rotate(0deg); }
             100% { transform: rotate(0deg); }
         }
         .nozzle {
@@ -168,7 +131,7 @@
             box-shadow: 0 0 10px rgba(79,195,247,0.6);
         }
 
-        /* Струи воды */
+        /* ===== СТРУИ ВОДЫ (ТЕПЕРЬ РЕАЛЬНО НИСХОДЯЩИЕ) ===== */
         .water-streams {
             position: absolute;
             bottom: 0; left: 0;
@@ -182,71 +145,33 @@
             left: 150px;
             width: 5px;
             height: 0;
-            background: linear-gradient(to top, rgba(30, 150, 255, 0.9), rgba(30, 150, 255, 0.2));
+            background: linear-gradient(to top, rgba(30, 150, 255, 0.9), rgba(30, 150, 255, 0.1));
             border-radius: 50%;
             transform-origin: center bottom;
             opacity: 0;
-            /*
-              Струи появляются только когда разбрызгиватель наверху.
-              Весь цикл 8с, полив с 1.5с по 5с (3.5 секунды).
-              Анимация струи длится 2.5с, плюс задержки между струями.
-              Струи должны успеть все вылететь за 3.5с.
-              Первая струя: animation-delay: 1.5с + 0с
-              Последняя (9-я): animation-delay: 1.5с + 1.6с = 3.1с (успевает до 5с)
-            */
             animation: streamArc 2.5s ease-out forwards;
-            animation-delay: 1.5s; /* Базовая задержка, будет переопределена */
         }
-        .stream:nth-child(1) { transform: rotate(-50deg); animation-delay: 1.5s; }
-        .stream:nth-child(2) { transform: rotate(-37.5deg); animation-delay: 1.7s; }
-        .stream:nth-child(3) { transform: rotate(-25deg); animation-delay: 1.9s; }
-        .stream:nth-child(4) { transform: rotate(-12.5deg); animation-delay: 2.1s; }
-        .stream:nth-child(5) { transform: rotate(0deg); animation-delay: 2.3s; }
-        .stream:nth-child(6) { transform: rotate(12.5deg); animation-delay: 2.5s; }
-        .stream:nth-child(7) { transform: rotate(25deg); animation-delay: 2.7s; }
-        .stream:nth-child(8) { transform: rotate(37.5deg); animation-delay: 2.9s; }
-        .stream:nth-child(9) { transform: rotate(50deg); animation-delay: 3.1s; }
-
+        /*
+          Нисходящая траектория:
+          Струя сначала поднимается вверх и в сторону, потом плавно опускается вниз.
+          За счёт смещения left и изменения высоты создаётся эффект дуги.
+        */
         @keyframes streamArc {
-            0% { height: 0px; opacity: 1; }
-            20% { height: 80px; opacity: 0.9; }
-            50% { height: 180px; opacity: 0.6; }
-            80% { height: 200px; opacity: 0.2; }
-            100% { height: 150px; opacity: 0; }
+            0% { height: 0px; opacity: 1; left: 150px; }
+            15% { height: 100px; opacity: 0.9; left: 140px; }
+            40% { height: 180px; opacity: 0.6; left: 130px; }
+            70% { height: 150px; opacity: 0.3; left: 140px; }
+            100% { height: 0px; opacity: 0; left: 160px; }
         }
-
-        /* Капли (только во время полива) */
-        .falling-drops {
-            position: absolute;
-            bottom: 0; left: 0;
-            width: 100%; height: 100%;
-            z-index: 2;
-            pointer-events: none;
-        }
-        .f-drop {
-            position: absolute;
-            width: 5px; height: 5px;
-            background: rgba(30, 150, 255, 0.5);
-            border-radius: 50%;
-            opacity: 0;
-            animation: fDrop 8s infinite ease-in;
-        }
-        .f-drop:nth-child(1) { left: 20%; top: 10%; animation-delay: 1.8s; }
-        .f-drop:nth-child(2) { left: 38%; top: 8%; animation-delay: 2.2s; }
-        .f-drop:nth-child(3) { left: 55%; top: 12%; animation-delay: 2.6s; }
-        .f-drop:nth-child(4) { left: 70%; top: 15%; animation-delay: 3.0s; }
-        .f-drop:nth-child(5) { left: 28%; top: 25%; animation-delay: 2.0s; }
-        .f-drop:nth-child(6) { left: 48%; top: 22%; animation-delay: 2.4s; }
-        .f-drop:nth-child(7) { left: 62%; top: 28%; animation-delay: 2.8s; }
-        .f-drop:nth-child(8) { left: 42%; top: 35%; animation-delay: 2.1s; }
-        .f-drop:nth-child(9) { left: 55%; top: 38%; animation-delay: 2.5s; }
-        @keyframes fDrop {
-            0%, 18% { opacity: 0; }
-            18.75% { opacity: 0.6; }
-            50% { transform: translateY(80px) scale(0.5); opacity: 0.3; }
-            62.5% { opacity: 0; }
-            100% { opacity: 0; }
-        }
+        .stream:nth-child(1) { transform: rotate(-50deg); animation-delay: 1.0s; }
+        .stream:nth-child(2) { transform: rotate(-37.5deg); animation-delay: 1.2s; }
+        .stream:nth-child(3) { transform: rotate(-25deg); animation-delay: 1.4s; }
+        .stream:nth-child(4) { transform: rotate(-12.5deg); animation-delay: 1.6s; }
+        .stream:nth-child(5) { transform: rotate(0deg); animation-delay: 1.8s; }
+        .stream:nth-child(6) { transform: rotate(12.5deg); animation-delay: 2.0s; }
+        .stream:nth-child(7) { transform: rotate(25deg); animation-delay: 2.2s; }
+        .stream:nth-child(8) { transform: rotate(37.5deg); animation-delay: 2.4s; }
+        .stream:nth-child(9) { transform: rotate(50deg); animation-delay: 2.6s; }
 
         .services-grid {
             display: grid;
@@ -344,27 +269,11 @@
                 left: 110px;
                 width: 3px;
             }
-            @keyframes streamArc {
-                0% { height: 0px; opacity: 1; }
-                20% { height: 60px; opacity: 0.9; }
-                50% { height: 130px; opacity: 0.6; }
-                80% { height: 150px; opacity: 0.2; }
-                100% { height: 110px; opacity: 0; }
-            }
             .grass-front { height: 65px; }
         }
     </style>
 </head>
 <body>
-
-    <div class="bg-drops">
-        <div class="bg-drop"></div>
-        <div class="bg-drop"></div>
-        <div class="bg-drop"></div>
-        <div class="bg-drop"></div>
-        <div class="bg-drop"></div>
-        <div class="bg-drop"></div>
-    </div>
 
     <header>
         <div class="header-inner">
@@ -407,17 +316,6 @@
                         <div class="stream"></div>
                         <div class="stream"></div>
                         <div class="stream"></div>
-                    </div>
-                    <div class="falling-drops">
-                        <div class="f-drop"></div>
-                        <div class="f-drop"></div>
-                        <div class="f-drop"></div>
-                        <div class="f-drop"></div>
-                        <div class="f-drop"></div>
-                        <div class="f-drop"></div>
-                        <div class="f-drop"></div>
-                        <div class="f-drop"></div>
-                        <div class="f-drop"></div>
                     </div>
                     <div class="grass-front"></div>
                 </div>

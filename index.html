@@ -132,8 +132,8 @@
             box-shadow: 0 0 10px rgba(79,195,247,0.6);
         }
 
-        /* ===== СТРУИ ВОДЫ ===== */
-        .water-streams {
+        /* ===== НОВЫЕ КАПЛИ (ВМЕСТО СТРУЙ) ===== */
+        .spray-container {
             position: absolute;
             bottom: 0; left: 0;
             width: 100%; height: 100%;
@@ -141,36 +141,38 @@
             pointer-events: none;
         }
         /*
-          Координаты сопла:
-          bottom: 55 + 100 - 12 - 7 = 136px
-          left: 150px (центр)
-          Сдвигаем левее и ниже, как просили -> left: 140px, bottom: 130px
+          Капли вылетают из сопла (bottom: 130px, left: 140px)
+          и летят по дуге вниз веером.
         */
-        .stream {
+        .drop {
             position: absolute;
-            bottom: 130px;
-            left: 140px;
             width: 6px;
-            height: 0;
-            background: linear-gradient(to top, #4fc3f7, rgba(79, 195, 247, 0.1));
+            height: 6px;
+            background: #4fc3f7;
             border-radius: 50%;
-            transform-origin: center bottom;
+            box-shadow: 0 0 6px rgba(79, 195, 247, 0.5);
             opacity: 0;
-            animation: streamArc 2s infinite ease-out;
+            animation: dropFly 2.5s infinite ease-in;
         }
-        @keyframes streamArc {
-            0% { height: 0px; opacity: 1; left: 140px; }
-            20% { height: 60px; opacity: 0.9; left: 125px; }
-            50% { height: 120px; opacity: 0.6; left: 110px; }
-            80% { height: 90px; opacity: 0.2; left: 125px; }
-            100% { height: 0px; opacity: 0; left: 145px; }
+        @keyframes dropFly {
+            0% { transform: translate(0, 0) scale(1); opacity: 1; }
+            30% { transform: translate(var(--dx), var(--dy1)) scale(0.8); opacity: 0.8; }
+            60% { transform: translate(var(--dx2), var(--dy2)) scale(0.5); opacity: 0.4; }
+            100% { transform: translate(var(--dx3), var(--dy3)) scale(0.2); opacity: 0; }
         }
-        .stream:nth-child(1) { transform: rotate(-45deg); animation-delay: 1.5s; }
-        .stream:nth-child(2) { transform: rotate(-27deg); animation-delay: 1.8s; }
-        .stream:nth-child(3) { transform: rotate(-9deg); animation-delay: 2.1s; }
-        .stream:nth-child(4) { transform: rotate(9deg); animation-delay: 2.4s; }
-        .stream:nth-child(5) { transform: rotate(27deg); animation-delay: 2.7s; }
-        .stream:nth-child(6) { transform: rotate(45deg); animation-delay: 3.0s; }
+        /* Каждая капля имеет свою траекторию (наклон) */
+        .drop:nth-child(1) { --dx: -20px; --dy1: -40px; --dx2: -50px; --dy2: 20px; --dx3: -80px; --dy3: 100px; left: 140px; bottom: 130px; animation-delay: 1.5s; }
+        .drop:nth-child(2) { --dx: -15px; --dy1: -45px; --dx2: -40px; --dy2: 10px; --dx3: -65px; --dy3: 90px; left: 140px; bottom: 130px; animation-delay: 1.7s; }
+        .drop:nth-child(3) { --dx: -10px; --dy1: -50px; --dx2: -30px; --dy2: 0px; --dx3: -50px; --dy3: 80px; left: 140px; bottom: 130px; animation-delay: 1.9s; }
+        .drop:nth-child(4) { --dx: -5px; --dy1: -55px; --dx2: -20px; --dy2: -10px; --dx3: -35px; --dy3: 70px; left: 140px; bottom: 130px; animation-delay: 2.1s; }
+        .drop:nth-child(5) { --dx: 0px; --dy1: -60px; --dx2: -10px; --dy2: -20px; --dx3: -20px; --dy3: 60px; left: 140px; bottom: 130px; animation-delay: 2.3s; }
+        .drop:nth-child(6) { --dx: 5px; --dy1: -55px; --dx2: 0px; --dy2: -10px; --dx3: -5px; --dy3: 70px; left: 140px; bottom: 130px; animation-delay: 2.5s; }
+        .drop:nth-child(7) { --dx: 10px; --dy1: -50px; --dx2: 10px; --dy2: 0px; --dx3: 10px; --dy3: 80px; left: 140px; bottom: 130px; animation-delay: 2.7s; }
+        .drop:nth-child(8) { --dx: 15px; --dy1: -45px; --dx2: 20px; --dy2: 10px; --dx3: 25px; --dy3: 90px; left: 140px; bottom: 130px; animation-delay: 2.9s; }
+        .drop:nth-child(9) { --dx: 20px; --dy1: -40px; --dx2: 30px; --dy2: 20px; --dx3: 40px; --dy3: 100px; left: 140px; bottom: 130px; animation-delay: 3.1s; }
+        .drop:nth-child(10) { --dx: -25px; --dy1: -35px; --dx2: -60px; --dy2: 30px; --dx3: -95px; --dy3: 110px; left: 140px; bottom: 130px; animation-delay: 1.6s; }
+        .drop:nth-child(11) { --dx: -8px; --dy1: -48px; --dx2: -25px; --dy2: -5px; --dx3: -42px; --dy3: 75px; left: 140px; bottom: 130px; animation-delay: 2.0s; }
+        .drop:nth-child(12) { --dx: 8px; --dy1: -48px; --dx2: 5px; --dy2: -5px; --dx3: 2px; --dy3: 75px; left: 140px; bottom: 130px; animation-delay: 2.6s; }
 
         .services-grid {
             display: grid;
@@ -263,11 +265,22 @@
             .sprinkler-body { width: 40px; height: 75px; }
             .sprinkler-head { width: 34px; height: 24px; top: -10px; }
             .nozzle { width: 10px; height: 10px; top: -5px; }
-            .stream {
-                bottom: 95px;
-                left: 105px;
+            .drop {
                 width: 4px;
+                height: 4px;
             }
+            .drop:nth-child(1) { left: 105px; bottom: 95px; }
+            .drop:nth-child(2) { left: 105px; bottom: 95px; }
+            .drop:nth-child(3) { left: 105px; bottom: 95px; }
+            .drop:nth-child(4) { left: 105px; bottom: 95px; }
+            .drop:nth-child(5) { left: 105px; bottom: 95px; }
+            .drop:nth-child(6) { left: 105px; bottom: 95px; }
+            .drop:nth-child(7) { left: 105px; bottom: 95px; }
+            .drop:nth-child(8) { left: 105px; bottom: 95px; }
+            .drop:nth-child(9) { left: 105px; bottom: 95px; }
+            .drop:nth-child(10) { left: 105px; bottom: 95px; }
+            .drop:nth-child(11) { left: 105px; bottom: 95px; }
+            .drop:nth-child(12) { left: 105px; bottom: 95px; }
             .grass-front { height: 70px; }
         }
     </style>
@@ -305,13 +318,19 @@
                             </div>
                         </div>
                     </div>
-                    <div class="water-streams">
-                        <div class="stream"></div>
-                        <div class="stream"></div>
-                        <div class="stream"></div>
-                        <div class="stream"></div>
-                        <div class="stream"></div>
-                        <div class="stream"></div>
+                    <div class="spray-container">
+                        <div class="drop"></div>
+                        <div class="drop"></div>
+                        <div class="drop"></div>
+                        <div class="drop"></div>
+                        <div class="drop"></div>
+                        <div class="drop"></div>
+                        <div class="drop"></div>
+                        <div class="drop"></div>
+                        <div class="drop"></div>
+                        <div class="drop"></div>
+                        <div class="drop"></div>
+                        <div class="drop"></div>
                     </div>
                     <div class="grass-front"></div>
                 </div>

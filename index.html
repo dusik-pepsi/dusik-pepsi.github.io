@@ -593,10 +593,6 @@
                 <h2>Свяжитесь со мной</h2>
                 <p>Напишите в удобный мессенджер — я отвечу быстро и с радостью помогу с проектом!</p>
                 <div class="contact-buttons">
-                    <a href="https://t.me/+79151064652" target="_blank" class="contact-btn telegram">
-                        <span class="btn-icon">✈️</span>
-                        Написать в Telegram
-                    </a>
                     <a href="https://wa.me/79151064652" target="_blank" class="contact-btn whatsapp">
                         <span class="btn-icon">💬</span>
                         Написать в WhatsApp
@@ -607,20 +603,23 @@
                 </p>
                 <p style="color:#999; font-size:14px;">
                     📍 Москва и Московская область <br>
-                    ✉️ linda.poliv@example.com
+                    ✉️ linda.poliv@mail.ru
                 </p>
             </div>
             <div class="contact-form">
                 <h3>📝 Оставьте заявку</h3>
-                <form onsubmit="event.preventDefault(); alert('Спасибо! Я свяжусь с вами в ближайшее время.');">
-                    <input type="text" placeholder="Ваше имя" required>
-                    <input type="tel" placeholder="Номер телефона" required>
-                    <input type="text" placeholder="Площадь участка (соток)">
-                    <textarea placeholder="Опишите задачу..."></textarea>
+                <form action="https://formspree.io/f/mwvzngzn" method="POST">
+                    <input type="text" name="name" placeholder="Ваше имя" required>
+                    <input type="tel" name="phone" placeholder="Номер телефона" required>
+                    <input type="text" name="area" placeholder="Площадь участка (соток)">
+                    <textarea name="message" placeholder="Опишите задачу..."></textarea>
                     <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center;">
                         ✉️ Отправить
                     </button>
                 </form>
+                <p style="margin-top:10px; color:#999; font-size:13px; text-align:center;">
+                    ✅ Нажимая "Отправить", вы соглашаетесь на обработку данных
+                </p>
             </div>
         </div>
     </section>

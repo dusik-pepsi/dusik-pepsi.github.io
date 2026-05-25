@@ -5,90 +5,191 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Линда | Проектирование автополива</title>
     <style>
+        /* ===== ГЛОБАЛЬНЫЕ СТИЛИ ===== */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Segoe UI', Arial, sans-serif;
-            background: #f8faf8;
+            background: #f8faf8; /* Светлый фон, как у вас */
             color: #2d3436;
             line-height: 1.6;
             overflow-x: hidden;
         }
         a { text-decoration: none; color: inherit; }
 
+        /* ===== ФОНОВЫЕ КАПЛИ (на весь экран) ===== */
+        .bg-drops {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none; /* Чтобы не мешали кликам */
+            z-index: 0;
+            overflow: hidden;
+        }
+        .bg-drop {
+            position: absolute;
+            width: 6px;
+            height: 12px;
+            background: linear-gradient(180deg, rgba(79, 195, 247, 0.3), rgba(79, 195, 247, 0.05));
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            opacity: 0;
+            animation: rain 4s infinite ease-in;
+        }
+        /* Размещение капель по всему экрану (слева, где нет текста) */
+        .bg-drop:nth-child(1)  { left: 5%;  top: -5%;  animation-delay: 0s; }
+        .bg-drop:nth-child(2)  { left: 12%; top: 15%;  animation-delay: 0.8s; }
+        .bg-drop:nth-child(3)  { left: 3%;  top: 30%;  animation-delay: 1.6s; }
+        .bg-drop:nth-child(4)  { left: 18%; top: 45%;  animation-delay: 2.4s; }
+        .bg-drop:nth-child(5)  { left: 8%;  top: 60%;  animation-delay: 3.2s; }
+        .bg-drop:nth-child(6)  { left: 22%; top: 75%;  animation-delay: 0.4s; }
+        .bg-drop:nth-child(7)  { left: 85%; top: -5%;  animation-delay: 1.2s; }
+        .bg-drop:nth-child(8)  { left: 78%; top: 20%;  animation-delay: 2.0s; }
+        .bg-drop:nth-child(9)  { left: 92%; top: 35%;  animation-delay: 2.8s; }
+        .bg-drop:nth-child(10) { left: 75%; top: 50%;  animation-delay: 3.6s; }
+        .bg-drop:nth-child(11) { left: 88%; top: 65%;  animation-delay: 0.2s; }
+        .bg-drop:nth-child(12) { left: 82%; top: 80%;  animation-delay: 1.0s; }
+        .bg-drop:nth-child(13) { left: 35%; top: -5%;  animation-delay: 0.5s; }
+        .bg-drop:nth-child(14) { left: 45%; top: 25%;  animation-delay: 1.5s; }
+        .bg-drop:nth-child(15) { left: 30%; top: 55%;  animation-delay: 2.5s; }
+        .bg-drop:nth-child(16) { left: 50%; top: 70%;  animation-delay: 3.5s; }
+        .bg-drop:nth-child(17) { left: 60%; top: 10%;  animation-delay: 0.9s; }
+        .bg-drop:nth-child(18) { left: 70%; top: 40%;  animation-delay: 1.9s; }
+        .bg-drop:nth-child(19) { left: 40%; top: 85%;  animation-delay: 2.9s; }
+        .bg-drop:nth-child(20) { left: 55%; top: 95%;  animation-delay: 3.9s; }
+
+        @keyframes rain {
+            0%   { transform: translateY(-20px); opacity: 0; }
+            20%  { opacity: 0.4; }
+            80%  { opacity: 0.4; }
+            100% { transform: translateY(105vh); opacity: 0; }
+        }
+
+        /* ===== ШАПКА ===== */
         header {
             background: white;
             box-shadow: 0 2px 20px rgba(0,0,0,0.05);
-            position: sticky; top: 0; z-index: 100;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
         .header-inner {
-            max-width: 1100px; margin: 0 auto;
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 15px 20px; position: relative; z-index: 2;
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            position: relative;
+            z-index: 2;
         }
-        .logo { font-size: 28px; font-weight: 800; color: #2d7d46; letter-spacing: -1px; }
+        .logo {
+            font-size: 28px;
+            font-weight: 800;
+            color: #2d7d46;
+            letter-spacing: -1px;
+        }
         .logo span { color: #4a9e6b; font-weight: 300; }
         nav { display: flex; gap: 30px; }
-        nav a { font-weight: 600; color: #555; transition: 0.3s; padding-bottom: 5px; border-bottom: 2px solid transparent; }
+        nav a {
+            font-weight: 600;
+            color: #555;
+            transition: 0.3s;
+            padding-bottom: 5px;
+            border-bottom: 2px solid transparent;
+        }
         nav a:hover, nav a.active { color: #2d7d46; border-bottom-color: #2d7d46; }
         .hamburger { display: none; font-size: 28px; cursor: pointer; background: none; border: none; color: #2d7d46; }
 
+        /* ===== СТРАНИЦЫ ===== */
         .page {
-            display: none; max-width: 1100px; margin: 0 auto; padding: 40px 20px;
-            animation: fadeIn 0.5s ease; position: relative; z-index: 1;
+            display: none;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            animation: fadeIn 0.5s ease;
+            position: relative;
+            z-index: 1;
         }
         .page.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        .hero { display: flex; flex-wrap: wrap; gap: 40px; align-items: center; margin-bottom: 60px; }
+        /* ===== ГЛАВНАЯ (Hero) ===== */
+        .hero {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+            align-items: center;
+            margin-bottom: 60px;
+        }
         .hero-text { flex: 1; min-width: 280px; }
-        .hero-text h1 { font-size: 48px; font-weight: 800; color: #1a3a2b; margin-bottom: 15px; line-height: 1.2; }
+        .hero-text h1 {
+            font-size: 48px;
+            font-weight: 800;
+            color: #1a3a2b;
+            margin-bottom: 15px;
+            line-height: 1.2;
+        }
         .hero-text h1 span { color: #2d7d46; }
         .hero-text p { font-size: 18px; color: #666; margin-bottom: 25px; }
         .btn-group { display: flex; gap: 15px; flex-wrap: wrap; }
         .btn {
-            display: inline-flex; align-items: center; gap: 10px;
-            padding: 14px 30px; border-radius: 50px; font-weight: 700;
-            font-size: 16px; transition: 0.3s; border: none; cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 30px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 16px;
+            transition: 0.3s;
+            border: none;
+            cursor: pointer;
         }
         .btn-primary { background: #2d7d46; color: white; }
-        .btn-primary:hover { background: #236a3a; transform: translateY(-2px); box-shadow: 0 10px 30px rgba(45,125,70,0.3); }
+        .btn-primary:hover {
+            background: #236a3a;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(45,125,70,0.3);
+        }
         .btn-secondary { background: white; color: #2d7d46; border: 2px solid #2d7d46; }
         .btn-secondary:hover { background: #f0f9f0; transform: translateY(-2px); }
 
-        /* ===== СЦЕНА ===== */
+        /* ===== РАЗБРЫЗГИВАТЕЛЬ (только на главной, без полива) ===== */
         .hero-visual { flex: 1; min-width: 280px; text-align: center; }
         .sprinkler-scene {
-            width: 300px; height: 360px;
-            margin: 0 auto; position: relative;
-            overflow: hidden;
+            width: 200px;
+            height: 300px;
+            margin: 0 auto;
+            position: relative;
         }
         .grass-front {
             position: absolute;
-            bottom: 0; left: 0;
-            width: 100%; height: 95px;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 70px;
             background: linear-gradient(180deg, #4a9e6b 0%, #2d7d46 100%);
             border-radius: 60% 60% 0 0 / 100% 100% 0 0;
             z-index: 10;
         }
-
-        /* ===== РАЗБРЫЗГИВАТЕЛЬ ===== */
         .sprinkler-unit {
             position: absolute;
-            bottom: 55px;
+            bottom: 40px;
             left: 50%;
             transform: translateX(-50%);
             z-index: 5;
-            animation: popUpCycle 8s infinite ease-in-out;
+            animation: popUpCycle 6s infinite ease-in-out;
         }
         @keyframes popUpCycle {
-            0% { transform: translateX(-50%) translateY(40px); }
-            18.75% { transform: translateX(-50%) translateY(0); }
-            62.5% { transform: translateX(-50%) translateY(0); }
-            81.25% { transform: translateX(-50%) translateY(40px); }
-            100% { transform: translateX(-50%) translateY(40px); }
+            0%   { transform: translateX(-50%) translateY(35px); }
+            20%  { transform: translateX(-50%) translateY(0); }
+            60%  { transform: translateX(-50%) translateY(0); }
+            80%  { transform: translateX(-50%) translateY(35px); }
+            100% { transform: translateX(-50%) translateY(35px); }
         }
         .sprinkler-body {
-            width: 55px; height: 100px;
+            width: 45px;
+            height: 90px;
             background: linear-gradient(180deg, #5a5a5a, #3a3a3a);
             border-radius: 8px 8px 15px 15px;
             position: relative;
@@ -97,91 +198,58 @@
         .sprinkler-body::before {
             content: '';
             position: absolute;
-            top: 10px; left: 50%;
+            top: 10px;
+            left: 50%;
             transform: translateX(-50%);
-            width: 32px; height: 8px;
+            width: 28px;
+            height: 8px;
             background: #555;
             border-radius: 4px;
         }
         .sprinkler-head {
-            width: 45px; height: 32px;
+            width: 40px;
+            height: 28px;
             background: linear-gradient(180deg, #6a6a6a, #4a4a4a);
             border-radius: 6px 6px 4px 4px;
             margin: 0 auto;
-            position: relative; top: -12px;
-            animation: headWobble 8s infinite ease-in-out;
+            position: relative;
+            top: -10px;
+            animation: headWobble 6s infinite ease-in-out;
             transform-origin: center bottom;
         }
         @keyframes headWobble {
-            0% { transform: rotate(0deg); }
-            18.75% { transform: rotate(0deg); }
-            35% { transform: rotate(-15deg); }
-            50% { transform: rotate(15deg); }
-            62.5% { transform: rotate(0deg); }
+            0%   { transform: rotate(0deg); }
+            20%  { transform: rotate(0deg); }
+            40%  { transform: rotate(-10deg); }
+            50%  { transform: rotate(10deg); }
+            60%  { transform: rotate(0deg); }
             100% { transform: rotate(0deg); }
         }
         .nozzle {
-            width: 14px; height: 14px;
+            width: 12px;
+            height: 12px;
             background: radial-gradient(circle, #aaa, #777);
             border-radius: 50%;
             position: absolute;
-            top: -7px;
+            top: -6px;
             left: 50%;
             transform: translateX(-50%);
             z-index: 6;
-            box-shadow: 0 0 10px rgba(79,195,247,0.6);
         }
 
-        /* ===== НОВЫЕ КАПЛИ (ВМЕСТО СТРУЙ) ===== */
-        .spray-container {
-            position: absolute;
-            bottom: 0; left: 0;
-            width: 100%; height: 100%;
-            z-index: 3;
-            pointer-events: none;
-        }
-        /*
-          Капли вылетают из сопла (bottom: 130px, left: 140px)
-          и летят по дуге вниз веером.
-        */
-        .drop {
-            position: absolute;
-            width: 6px;
-            height: 6px;
-            background: #4fc3f7;
-            border-radius: 50%;
-            box-shadow: 0 0 6px rgba(79, 195, 247, 0.5);
-            opacity: 0;
-            animation: dropFly 2.5s infinite ease-in;
-        }
-        @keyframes dropFly {
-            0% { transform: translate(0, 0) scale(1); opacity: 1; }
-            30% { transform: translate(var(--dx), var(--dy1)) scale(0.8); opacity: 0.8; }
-            60% { transform: translate(var(--dx2), var(--dy2)) scale(0.5); opacity: 0.4; }
-            100% { transform: translate(var(--dx3), var(--dy3)) scale(0.2); opacity: 0; }
-        }
-        /* Каждая капля имеет свою траекторию (наклон) */
-        .drop:nth-child(1) { --dx: -20px; --dy1: -40px; --dx2: -50px; --dy2: 20px; --dx3: -80px; --dy3: 100px; left: 140px; bottom: 130px; animation-delay: 1.5s; }
-        .drop:nth-child(2) { --dx: -15px; --dy1: -45px; --dx2: -40px; --dy2: 10px; --dx3: -65px; --dy3: 90px; left: 140px; bottom: 130px; animation-delay: 1.7s; }
-        .drop:nth-child(3) { --dx: -10px; --dy1: -50px; --dx2: -30px; --dy2: 0px; --dx3: -50px; --dy3: 80px; left: 140px; bottom: 130px; animation-delay: 1.9s; }
-        .drop:nth-child(4) { --dx: -5px; --dy1: -55px; --dx2: -20px; --dy2: -10px; --dx3: -35px; --dy3: 70px; left: 140px; bottom: 130px; animation-delay: 2.1s; }
-        .drop:nth-child(5) { --dx: 0px; --dy1: -60px; --dx2: -10px; --dy2: -20px; --dx3: -20px; --dy3: 60px; left: 140px; bottom: 130px; animation-delay: 2.3s; }
-        .drop:nth-child(6) { --dx: 5px; --dy1: -55px; --dx2: 0px; --dy2: -10px; --dx3: -5px; --dy3: 70px; left: 140px; bottom: 130px; animation-delay: 2.5s; }
-        .drop:nth-child(7) { --dx: 10px; --dy1: -50px; --dx2: 10px; --dy2: 0px; --dx3: 10px; --dy3: 80px; left: 140px; bottom: 130px; animation-delay: 2.7s; }
-        .drop:nth-child(8) { --dx: 15px; --dy1: -45px; --dx2: 20px; --dy2: 10px; --dx3: 25px; --dy3: 90px; left: 140px; bottom: 130px; animation-delay: 2.9s; }
-        .drop:nth-child(9) { --dx: 20px; --dy1: -40px; --dx2: 30px; --dy2: 20px; --dx3: 40px; --dy3: 100px; left: 140px; bottom: 130px; animation-delay: 3.1s; }
-        .drop:nth-child(10) { --dx: -25px; --dy1: -35px; --dx2: -60px; --dy2: 30px; --dx3: -95px; --dy3: 110px; left: 140px; bottom: 130px; animation-delay: 1.6s; }
-        .drop:nth-child(11) { --dx: -8px; --dy1: -48px; --dx2: -25px; --dy2: -5px; --dx3: -42px; --dy3: 75px; left: 140px; bottom: 130px; animation-delay: 2.0s; }
-        .drop:nth-child(12) { --dx: 8px; --dy1: -48px; --dx2: 5px; --dy2: -5px; --dx3: 2px; --dy3: 75px; left: 140px; bottom: 130px; animation-delay: 2.6s; }
-
+        /* ===== СЕТКА УСЛУГ ===== */
         .services-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 25px; margin: 40px 0;
+            gap: 25px;
+            margin: 40px 0;
         }
         .service-card {
-            background: white; border-radius: 16px; padding: 30px;
-            box-shadow: 0 5px 25px rgba(0,0,0,0.05); transition: 0.3s;
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.05);
+            transition: 0.3s;
             border-top: 4px solid #2d7d46;
         }
         .service-card:hover { transform: translateY(-5px); box-shadow: 0 15px 40px rgba(0,0,0,0.1); }
@@ -189,104 +257,167 @@
         .service-card h3 { font-size: 20px; margin-bottom: 10px; color: #1a3a2b; }
         .service-card p { color: #777; font-size: 15px; }
 
+        /* ===== ПОРТФОЛИО ===== */
         .portfolio-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px; margin: 30px 0;
+            gap: 25px;
+            margin: 30px 0;
         }
         .portfolio-item {
-            background: white; border-radius: 16px; overflow: hidden;
-            box-shadow: 0 5px 25px rgba(0,0,0,0.05); transition: 0.3s;
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.05);
+            transition: 0.3s;
         }
         .portfolio-item:hover { transform: translateY(-5px); box-shadow: 0 15px 40px rgba(0,0,0,0.1); }
         .portfolio-img {
-            height: 200px; background: #e8f5e9;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 60px; color: #2d7d46;
+            height: 200px;
+            background: #e8f5e9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            color: #2d7d46;
         }
         .portfolio-info { padding: 20px; }
         .portfolio-info h3 { font-size: 18px; margin-bottom: 8px; color: #1a3a2b; }
         .portfolio-info p { color: #888; font-size: 14px; }
         .tag {
-            display: inline-block; background: #e8f5e9; color: #2d7d46;
-            padding: 3px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; margin-top: 8px;
+            display: inline-block;
+            background: #e8f5e9;
+            color: #2d7d46;
+            padding: 3px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 8px;
         }
 
+        /* ===== КОНТАКТЫ ===== */
         .contact-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 40px; margin-top: 30px;
+            gap: 40px;
+            margin-top: 30px;
         }
         .contact-info h2 { font-size: 32px; color: #1a3a2b; margin-bottom: 20px; }
         .contact-info p { color: #666; margin-bottom: 25px; font-size: 18px; }
         .contact-buttons { display: flex; flex-direction: column; gap: 15px; }
         .contact-btn {
-            display: flex; align-items: center; gap: 15px;
-            padding: 18px 25px; border-radius: 14px;
-            font-size: 18px; font-weight: 600; transition: 0.3s; border: none; cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 18px 25px;
+            border-radius: 14px;
+            font-size: 18px;
+            font-weight: 600;
+            transition: 0.3s;
+            border: none;
+            cursor: pointer;
         }
         .contact-btn.telegram { background: #0088cc; color: white; }
-        .contact-btn.telegram:hover { background: #0077b5; transform: translateX(5px); box-shadow: 0 8px 25px rgba(0,136,204,0.3); }
+        .contact-btn.telegram:hover {
+            background: #0077b5;
+            transform: translateX(5px);
+            box-shadow: 0 8px 25px rgba(0,136,204,0.3);
+        }
         .contact-btn.whatsapp { background: #25D366; color: white; }
-        .contact-btn.whatsapp:hover { background: #1da851; transform: translateX(5px); box-shadow: 0 8px 25px rgba(37,211,102,0.3); }
+        .contact-btn.whatsapp:hover {
+            background: #1da851;
+            transform: translateX(5px);
+            box-shadow: 0 8px 25px rgba(37,211,102,0.3);
+        }
         .contact-btn .btn-icon { font-size: 28px; }
 
         .contact-form {
-            background: white; padding: 30px; border-radius: 16px;
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
             box-shadow: 0 5px 25px rgba(0,0,0,0.05);
         }
         .contact-form h3 { font-size: 22px; margin-bottom: 20px; color: #1a3a2b; }
-        .contact-form input, .contact-form textarea {
-            width: 100%; padding: 14px 18px; border: 2px solid #e0e0e0;
-            border-radius: 10px; margin-bottom: 15px; font-size: 16px;
-            font-family: inherit; transition: 0.3s;
+        .contact-form input,
+        .contact-form textarea {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            font-size: 16px;
+            font-family: inherit;
+            transition: 0.3s;
         }
-        .contact-form input:focus, .contact-form textarea:focus { outline: none; border-color: #2d7d46; }
+        .contact-form input:focus,
+        .contact-form textarea:focus { outline: none; border-color: #2d7d46; }
         .contact-form textarea { height: 120px; resize: vertical; }
 
+        /* ===== ПОДВАЛ ===== */
         footer {
-            text-align: center; padding: 30px 20px;
-            color: #999; font-size: 14px;
-            border-top: 1px solid #e0e0e0; margin-top: 40px;
-            position: relative; z-index: 1;
+            text-align: center;
+            padding: 30px 20px;
+            color: #999;
+            font-size: 14px;
+            border-top: 1px solid #e0e0e0;
+            margin-top: 40px;
+            position: relative;
+            z-index: 1;
         }
 
+        /* ===== АДАПТАЦИЯ ПОД ТЕЛЕФОН ===== */
         @media (max-width: 768px) {
             .hamburger { display: block; }
             nav {
-                display: none; flex-direction: column; position: absolute;
-                top: 70px; left: 0; right: 0; background: white;
-                padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); gap: 15px;
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 70px;
+                left: 0;
+                right: 0;
+                background: white;
+                padding: 20px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+                gap: 15px;
             }
             nav.open { display: flex; }
             .hero-text h1 { font-size: 34px; }
             .contact-grid { grid-template-columns: 1fr; }
-            .sprinkler-scene { width: 220px; height: 260px; }
-            .sprinkler-body { width: 40px; height: 75px; }
-            .sprinkler-head { width: 34px; height: 24px; top: -10px; }
+            .sprinkler-scene { width: 150px; height: 220px; }
+            .sprinkler-body { width: 35px; height: 70px; }
+            .sprinkler-head { width: 32px; height: 22px; top: -8px; }
             .nozzle { width: 10px; height: 10px; top: -5px; }
-            .drop {
-                width: 4px;
-                height: 4px;
-            }
-            .drop:nth-child(1) { left: 105px; bottom: 95px; }
-            .drop:nth-child(2) { left: 105px; bottom: 95px; }
-            .drop:nth-child(3) { left: 105px; bottom: 95px; }
-            .drop:nth-child(4) { left: 105px; bottom: 95px; }
-            .drop:nth-child(5) { left: 105px; bottom: 95px; }
-            .drop:nth-child(6) { left: 105px; bottom: 95px; }
-            .drop:nth-child(7) { left: 105px; bottom: 95px; }
-            .drop:nth-child(8) { left: 105px; bottom: 95px; }
-            .drop:nth-child(9) { left: 105px; bottom: 95px; }
-            .drop:nth-child(10) { left: 105px; bottom: 95px; }
-            .drop:nth-child(11) { left: 105px; bottom: 95px; }
-            .drop:nth-child(12) { left: 105px; bottom: 95px; }
-            .grass-front { height: 70px; }
+            .grass-front { height: 50px; }
         }
     </style>
 </head>
 <body>
 
+    <!-- ========== ФОНОВЫЕ КАПЛИ ========== -->
+    <div class="bg-drops">
+        <div class="bg-drop"></div>
+        <div class="bg-drop"></div>
+        <div class="bg-drop"></div>
+        <div class="bg-drop"></div>
+        <div class="bg-drop"></div>
+        <div class="bg-drop"></div>
+        <div class="bg-drop"></div>
+        <div class="bg-drop"></div>
+        <div class="bg-drop"></div>
+        <div class="bg-drop"></div>
+        <div class="bg-drop"></div>
+        <div class="bg-drop"></div>
+        <div class="bg-drop"></div>
+        <div class="bg-drop"></div>
+        <div class="bg-drop"></div>
+        <div class="bg-drop"></div>
+        <div class="bg-drop"></div>
+        <div class="bg-drop"></div>
+        <div class="bg-drop"></div>
+        <div class="bg-drop"></div>
+    </div>
+
+    <!-- ========== ШАПКА ========== -->
     <header>
         <div class="header-inner">
             <div class="logo">Линда<span>Полив</span></div>
@@ -299,6 +430,7 @@
         </div>
     </header>
 
+    <!-- ========== СТРАНИЦА: ГЛАВНАЯ ========== -->
     <section class="page active" id="home">
         <div class="hero">
             <div class="hero-text">
@@ -317,20 +449,6 @@
                                 <div class="nozzle"></div>
                             </div>
                         </div>
-                    </div>
-                    <div class="spray-container">
-                        <div class="drop"></div>
-                        <div class="drop"></div>
-                        <div class="drop"></div>
-                        <div class="drop"></div>
-                        <div class="drop"></div>
-                        <div class="drop"></div>
-                        <div class="drop"></div>
-                        <div class="drop"></div>
-                        <div class="drop"></div>
-                        <div class="drop"></div>
-                        <div class="drop"></div>
-                        <div class="drop"></div>
                     </div>
                     <div class="grass-front"></div>
                 </div>
@@ -378,6 +496,7 @@
         </div>
     </section>
 
+    <!-- ========== СТРАНИЦА: ПОРТФОЛИО ========== -->
     <section class="page" id="portfolio">
         <h1 style="font-size:36px; color:#1a3a2b; margin-bottom:10px;">Галерея проектов</h1>
         <p style="color:#888; margin-bottom:30px;">Фотографии проектов добавлю позже</p>
@@ -440,6 +559,7 @@
         </div>
     </section>
 
+    <!-- ========== СТРАНИЦА: КОНТАКТЫ ========== -->
     <section class="page" id="contacts">
         <div class="contact-grid">
             <div class="contact-info">
@@ -481,10 +601,12 @@
         </div>
     </section>
 
+    <!-- ========== ПОДВАЛ ========== -->
     <footer>
         © 2024 Линда — проектирование автополива. «Добренько поливаем» 🌱
     </footer>
 
+    <!-- ========== СКРИПТЫ ========== -->
     <script>
         function navigateTo(pageId) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));

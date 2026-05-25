@@ -15,8 +15,49 @@
             background: #f8faf8;
             color: #2d3436;
             line-height: 1.6;
+            overflow-x: hidden;
         }
         a { text-decoration: none; color: inherit; }
+
+        /* ===== ФОН: АККУРАТНЫЕ КАПЛИ ПО ВСЕМУ САЙТУ ===== */
+        .bg-drops {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+        .bg-drop {
+            position: absolute;
+            width: 6px;
+            height: 12px;
+            background: linear-gradient(180deg, rgba(79, 195, 247, 0.3), rgba(2, 136, 209, 0.1));
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            opacity: 0;
+            animation: bgDrop 4s infinite ease-in-out;
+        }
+        .bg-drop:nth-child(1) { left: 10%; top: 20%; animation-delay: 0s; animation-duration: 3.5s; }
+        .bg-drop:nth-child(2) { left: 25%; top: 50%; animation-delay: 1.2s; animation-duration: 4.2s; }
+        .bg-drop:nth-child(3) { left: 40%; top: 30%; animation-delay: 2.5s; animation-duration: 3.8s; }
+        .bg-drop:nth-child(4) { left: 55%; top: 65%; animation-delay: 0.8s; animation-duration: 4.5s; }
+        .bg-drop:nth-child(5) { left: 70%; top: 15%; animation-delay: 1.8s; animation-duration: 3.2s; }
+        .bg-drop:nth-child(6) { left: 85%; top: 45%; animation-delay: 3.0s; animation-duration: 4.0s; }
+        .bg-drop:nth-child(7) { left: 15%; top: 75%; animation-delay: 2.0s; animation-duration: 3.6s; }
+        .bg-drop:nth-child(8) { left: 50%; top: 85%; animation-delay: 0.5s; animation-duration: 4.3s; }
+        .bg-drop:nth-child(9) { left: 30%; top: 10%; animation-delay: 3.5s; animation-duration: 3.4s; }
+        .bg-drop:nth-child(10) { left: 65%; top: 80%; animation-delay: 1.5s; animation-duration: 4.1s; }
+        .bg-drop:nth-child(11) { left: 90%; top: 60%; animation-delay: 0.3s; animation-duration: 3.9s; }
+        .bg-drop:nth-child(12) { left: 5%; top: 40%; animation-delay: 2.8s; animation-duration: 4.4s; }
+
+        @keyframes bgDrop {
+            0% { transform: translateY(-20px) scale(0.8); opacity: 0; }
+            20% { opacity: 0.4; }
+            80% { opacity: 0.4; }
+            100% { transform: translateY(100vh) scale(0.4); opacity: 0; }
+        }
 
         header {
             background: white;
@@ -32,6 +73,8 @@
             justify-content: space-between;
             align-items: center;
             padding: 15px 20px;
+            position: relative;
+            z-index: 2;
         }
         .logo {
             font-size: 28px;
@@ -51,7 +94,15 @@
         nav a:hover, nav a.active { color: #2d7d46; border-bottom-color: #2d7d46; }
         .hamburger { display: none; font-size: 28px; cursor: pointer; background: none; border: none; color: #2d7d46; }
 
-        .page { display: none; max-width: 1100px; margin: 0 auto; padding: 40px 20px; animation: fadeIn 0.5s ease; }
+        .page {
+            display: none;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            animation: fadeIn 0.5s ease;
+            position: relative;
+            z-index: 1;
+        }
         .page.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
@@ -90,7 +141,7 @@
         .btn-secondary { background: white; color: #2d7d46; border: 2px solid #2d7d46; }
         .btn-secondary:hover { background: #f0f9f0; transform: translateY(-2px); }
 
-        /* ===== НОВАЯ АНИМАЦИЯ РАЗБРЫЗГИВАТЕЛЯ HUNTER ===== */
+        /* ===== РАСПЫЛИТЕЛЬ (ВЕЕРНЫЕ СТРУИ) ===== */
         .hero-visual { flex: 1; min-width: 280px; text-align: center; }
         .sprinkler-container {
             width: 320px;
@@ -98,7 +149,6 @@
             margin: 0 auto;
             position: relative;
         }
-        /* Корпус разбрызгивателя */
         .sprinkler-body {
             width: 70px;
             height: 110px;
@@ -121,7 +171,6 @@
             background: #555;
             border-radius: 5px;
         }
-        /* Верхняя часть (ротор) */
         .sprinkler-top {
             width: 55px;
             height: 35px;
@@ -131,17 +180,18 @@
             position: relative;
             top: -20px;
             z-index: 3;
-            animation: rotateRotor 3s infinite linear;
+            animation: rotateRotor 3s infinite ease-in-out;
             transform-origin: center bottom;
         }
         @keyframes rotateRotor {
             0% { transform: rotate(0deg); }
-            25% { transform: rotate(15deg); }
+            25% { transform: rotate(20deg); }
             50% { transform: rotate(0deg); }
-            75% { transform: rotate(-15deg); }
+            75% { transform: rotate(-20deg); }
             100% { transform: rotate(0deg); }
         }
-        /* Струи воды (веер) */
+
+        /* Веерные струи */
         .spray {
             position: absolute;
             top: 80px;
@@ -153,11 +203,10 @@
         }
         .spray-stream {
             position: absolute;
-            width: 6px;
+            width: 4px;
             height: 100%;
             background: none;
             transform-origin: bottom center;
-            opacity: 0;
         }
         .spray-stream::before {
             content: '';
@@ -165,58 +214,71 @@
             bottom: 0;
             left: 50%;
             transform: translateX(-50%);
-            width: 6px;
-            height: 120px;
-            background: linear-gradient(to top, rgba(100,200,255,0.8), rgba(100,200,255,0));
+            width: 4px;
+            height: 0;
+            background: linear-gradient(to top, rgba(100, 200, 255, 0.7), rgba(100, 200, 255, 0));
             border-radius: 50%;
-            animation: sprayWater 2s infinite ease-out;
+            animation: sprayWater 1.8s infinite ease-out;
         }
-        .spray-stream:nth-child(1) { transform: rotate(-60deg); animation-delay: 0s; }
-        .spray-stream:nth-child(2) { transform: rotate(-45deg); animation-delay: 0.15s; }
-        .spray-stream:nth-child(3) { transform: rotate(-30deg); animation-delay: 0.3s; }
-        .spray-stream:nth-child(4) { transform: rotate(-15deg); animation-delay: 0.45s; }
-        .spray-stream:nth-child(5) { transform: rotate(0deg); animation-delay: 0.6s; }
-        .spray-stream:nth-child(6) { transform: rotate(15deg); animation-delay: 0.75s; }
-        .spray-stream:nth-child(7) { transform: rotate(30deg); animation-delay: 0.9s; }
-        .spray-stream:nth-child(8) { transform: rotate(45deg); animation-delay: 1.05s; }
-        .spray-stream:nth-child(9) { transform: rotate(60deg); animation-delay: 1.2s; }
+        .spray-stream:nth-child(1) { transform: rotate(-65deg); }
+        .spray-stream:nth-child(1)::before { animation-delay: 0s; }
+        .spray-stream:nth-child(2) { transform: rotate(-50deg); }
+        .spray-stream:nth-child(2)::before { animation-delay: 0.2s; }
+        .spray-stream:nth-child(3) { transform: rotate(-35deg); }
+        .spray-stream:nth-child(3)::before { animation-delay: 0.4s; }
+        .spray-stream:nth-child(4) { transform: rotate(-20deg); }
+        .spray-stream:nth-child(4)::before { animation-delay: 0.6s; }
+        .spray-stream:nth-child(5) { transform: rotate(-5deg); }
+        .spray-stream:nth-child(5)::before { animation-delay: 0.8s; }
+        .spray-stream:nth-child(6) { transform: rotate(10deg); }
+        .spray-stream:nth-child(6)::before { animation-delay: 1.0s; }
+        .spray-stream:nth-child(7) { transform: rotate(25deg); }
+        .spray-stream:nth-child(7)::before { animation-delay: 1.2s; }
+        .spray-stream:nth-child(8) { transform: rotate(40deg); }
+        .spray-stream:nth-child(8)::before { animation-delay: 1.4s; }
+        .spray-stream:nth-child(9) { transform: rotate(55deg); }
+        .spray-stream:nth-child(9)::before { animation-delay: 1.6s; }
 
         @keyframes sprayWater {
             0% { height: 0px; opacity: 1; }
-            50% { height: 140px; opacity: 0.8; }
-            100% { height: 160px; opacity: 0; }
+            40% { height: 160px; opacity: 0.8; }
+            100% { height: 180px; opacity: 0; }
         }
 
-        /* Капли воды (мелкие брызги) */
-        .droplet {
+        /* Капли возле распылителя */
+        .sprinkler-drops {
             position: absolute;
-            width: 4px;
-            height: 4px;
-            background: #4fc3f7;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+        .sprinkler-drop {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            background: rgba(79, 195, 247, 0.5);
             border-radius: 50%;
             opacity: 0;
-            animation: dropletFall 1.5s infinite;
+            animation: sprinklerDrop 2s infinite ease-in;
         }
-        .droplet:nth-child(1) { left: 30%; top: 40%; animation-delay: 0.1s; }
-        .droplet:nth-child(2) { left: 45%; top: 35%; animation-delay: 0.4s; }
-        .droplet:nth-child(3) { left: 55%; top: 38%; animation-delay: 0.7s; }
-        .droplet:nth-child(4) { left: 65%; top: 42%; animation-delay: 1.0s; }
-        .droplet:nth-child(5) { left: 38%; top: 50%; animation-delay: 0.2s; }
-        .droplet:nth-child(6) { left: 52%; top: 48%; animation-delay: 0.5s; }
-        .droplet:nth-child(7) { left: 62%; top: 52%; animation-delay: 0.8s; }
-        .droplet:nth-child(8) { left: 42%; top: 55%; animation-delay: 1.1s; }
-        .droplet:nth-child(9) { left: 58%; top: 58%; animation-delay: 0.3s; }
-        .droplet:nth-child(10) { left: 48%; top: 60%; animation-delay: 0.6s; }
-        .droplet:nth-child(11) { left: 35%; top: 62%; animation-delay: 0.9s; }
-        .droplet:nth-child(12) { left: 50%; top: 65%; animation-delay: 1.2s; }
+        .sprinkler-drop:nth-child(1) { left: 20%; top: 30%; animation-delay: 0.1s; }
+        .sprinkler-drop:nth-child(2) { left: 35%; top: 25%; animation-delay: 0.5s; }
+        .sprinkler-drop:nth-child(3) { left: 50%; top: 22%; animation-delay: 0.9s; }
+        .sprinkler-drop:nth-child(4) { left: 65%; top: 28%; animation-delay: 1.3s; }
+        .sprinkler-drop:nth-child(5) { left: 80%; top: 35%; animation-delay: 1.7s; }
+        .sprinkler-drop:nth-child(6) { left: 28%; top: 45%; animation-delay: 0.3s; }
+        .sprinkler-drop:nth-child(7) { left: 42%; top: 40%; animation-delay: 0.7s; }
+        .sprinkler-drop:nth-child(8) { left: 58%; top: 42%; animation-delay: 1.1s; }
+        .sprinkler-drop:nth-child(9) { left: 72%; top: 48%; animation-delay: 1.5s; }
 
-        @keyframes dropletFall {
-            0% { transform: translateY(0) scale(1); opacity: 1; }
-            50% { transform: translateY(80px) scale(0.7); opacity: 0.6; }
-            100% { transform: translateY(150px) scale(0.3); opacity: 0; }
+        @keyframes sprinklerDrop {
+            0% { transform: translateY(0) scale(1); opacity: 0.8; }
+            50% { transform: translateY(60px) scale(0.6); opacity: 0.5; }
+            100% { transform: translateY(120px) scale(0.2); opacity: 0; }
         }
 
-        /* Зелёная трава внизу */
         .grass {
             position: relative;
             top: 70px;
@@ -330,7 +392,16 @@
         .contact-form input:focus, .contact-form textarea:focus { outline: none; border-color: #2d7d46; }
         .contact-form textarea { height: 120px; resize: vertical; }
 
-        footer { text-align: center; padding: 30px 20px; color: #999; font-size: 14px; border-top: 1px solid #e0e0e0; margin-top: 40px; }
+        footer {
+            text-align: center;
+            padding: 30px 20px;
+            color: #999;
+            font-size: 14px;
+            border-top: 1px solid #e0e0e0;
+            margin-top: 40px;
+            position: relative;
+            z-index: 1;
+        }
 
         @media (max-width: 768px) {
             .hamburger { display: block; }
@@ -353,17 +424,33 @@
             .sprinkler-body { width: 50px; height: 80px; top: 50px; }
             .sprinkler-top { width: 40px; height: 25px; top: -15px; }
             .spray { width: 200px; height: 200px; top: 60px; }
-            .spray-stream::before { height: 80px; }
+            .spray-stream::before { height: 0; }
             @keyframes sprayWater {
                 0% { height: 0px; opacity: 1; }
-                50% { height: 90px; opacity: 0.8; }
-                100% { height: 110px; opacity: 0; }
+                40% { height: 110px; opacity: 0.8; }
+                100% { height: 130px; opacity: 0; }
             }
             .grass { top: 50px; height: 30px; }
         }
     </style>
 </head>
 <body>
+
+    <!-- Фоновые капли (аккуратно по всему сайту) -->
+    <div class="bg-drops">
+        <div class="bg-drop"></div>
+        <div class="bg-drop"></div>
+        <div class="bg-drop"></div>
+        <div class="bg-drop"></div>
+        <div class="bg-drop"></div>
+        <div class="bg-drop"></div>
+        <div class="bg-drop"></div>
+        <div class="bg-drop"></div>
+        <div class="bg-drop"></div>
+        <div class="bg-drop"></div>
+        <div class="bg-drop"></div>
+        <div class="bg-drop"></div>
+    </div>
 
     <header>
         <div class="header-inner">
@@ -403,18 +490,17 @@
                         <div class="spray-stream"></div>
                         <div class="spray-stream"></div>
                     </div>
-                    <div class="droplet"></div>
-                    <div class="droplet"></div>
-                    <div class="droplet"></div>
-                    <div class="droplet"></div>
-                    <div class="droplet"></div>
-                    <div class="droplet"></div>
-                    <div class="droplet"></div>
-                    <div class="droplet"></div>
-                    <div class="droplet"></div>
-                    <div class="droplet"></div>
-                    <div class="droplet"></div>
-                    <div class="droplet"></div>
+                    <div class="sprinkler-drops">
+                        <div class="sprinkler-drop"></div>
+                        <div class="sprinkler-drop"></div>
+                        <div class="sprinkler-drop"></div>
+                        <div class="sprinkler-drop"></div>
+                        <div class="sprinkler-drop"></div>
+                        <div class="sprinkler-drop"></div>
+                        <div class="sprinkler-drop"></div>
+                        <div class="sprinkler-drop"></div>
+                        <div class="sprinkler-drop"></div>
+                    </div>
                     <div class="grass"></div>
                 </div>
             </div>

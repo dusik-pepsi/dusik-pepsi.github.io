@@ -65,26 +65,34 @@
         .grass-front {
             position: absolute;
             bottom: 0; left: 0;
-            width: 100%; height: 90px;
+            width: 100%; height: 95px;
             background: linear-gradient(180deg, #4a9e6b 0%, #2d7d46 100%);
             border-radius: 60% 60% 0 0 / 100% 100% 0 0;
             z-index: 10;
         }
 
+        /* ===== РАЗБРЫЗГИВАТЕЛЬ ===== */
         .sprinkler-unit {
             position: absolute;
             bottom: 55px;
             left: 50%;
             transform: translateX(-50%);
             z-index: 5;
-            animation: popUpCycle 6s infinite ease-in-out;
+            /*
+              Цикл 8 секунд:
+              0-1.5с: подъём
+              1.5-5с: стоит на максимуме (полив)
+              5-6.5с: опускание
+              6.5-8с: пауза внизу
+            */
+            animation: popUpCycle 8s infinite ease-in-out;
         }
         @keyframes popUpCycle {
-            0% { transform: translateX(-50%) translateY(35px); }
-            16.6% { transform: translateX(-50%) translateY(0); }
-            50% { transform: translateX(-50%) translateY(0); }
-            66.6% { transform: translateX(-50%) translateY(35px); }
-            100% { transform: translateX(-50%) translateY(35px); }
+            0% { transform: translateX(-50%) translateY(40px); }
+            18.75% { transform: translateX(-50%) translateY(0); }
+            62.5% { transform: translateX(-50%) translateY(0); }
+            81.25% { transform: translateX(-50%) translateY(40px); }
+            100% { transform: translateX(-50%) translateY(40px); }
         }
         .sprinkler-body {
             width: 55px; height: 100px;
@@ -108,17 +116,18 @@
             border-radius: 6px 6px 4px 4px;
             margin: 0 auto;
             position: relative; top: -12px;
-            animation: headWobble 6s infinite ease-in-out;
+            animation: headWobble 8s infinite ease-in-out;
             transform-origin: center bottom;
         }
         @keyframes headWobble {
             0% { transform: rotate(0deg); }
-            16.6% { transform: rotate(0deg); }
-            33% { transform: rotate(-15deg); }
+            18.75% { transform: rotate(0deg); }
+            35% { transform: rotate(-15deg); }
             50% { transform: rotate(15deg); }
-            66.6% { transform: rotate(0deg); }
+            62.5% { transform: rotate(0deg); }
             100% { transform: rotate(0deg); }
         }
+        /* СОПЛО - точка вылета струй */
         .nozzle {
             width: 14px; height: 14px;
             background: radial-gradient(circle, #aaa, #777);
@@ -139,6 +148,11 @@
             z-index: 3;
             pointer-events: none;
         }
+        /*
+          Координаты сопла:
+          - От низа: 55px (отступ .sprinkler-unit) + 100px (корпус) - 12px (смещение головки) - 7px (смещение сопла) = 136px
+          - По центру: 150px (половина ширины 300px)
+        */
         .stream {
             position: absolute;
             bottom: 136px;
@@ -149,24 +163,30 @@
             border-radius: 50%;
             transform-origin: center bottom;
             opacity: 0;
+            /*
+              Струи работают только во время полива (1.5с - 5с).
+              Длина анимации: 2.5с. Первая струя в 1.5с, последняя в 3.1с.
+              Все укладываются в окно полива.
+              infinite - чтобы цикл повторялся.
+            */
             animation: streamArc 2.5s infinite ease-out;
         }
         @keyframes streamArc {
             0% { height: 0px; opacity: 1; left: 150px; }
-            15% { height: 100px; opacity: 0.9; left: 135px; }
-            40% { height: 180px; opacity: 0.6; left: 120px; }
-            70% { height: 140px; opacity: 0.3; left: 135px; }
+            15% { height: 80px; opacity: 0.9; left: 135px; }
+            40% { height: 160px; opacity: 0.6; left: 120px; }
+            70% { height: 120px; opacity: 0.3; left: 140px; }
             100% { height: 0px; opacity: 0; left: 160px; }
         }
-        .stream:nth-child(1) { transform: rotate(-50deg); animation-delay: 1.0s; }
-        .stream:nth-child(2) { transform: rotate(-37.5deg); animation-delay: 1.2s; }
-        .stream:nth-child(3) { transform: rotate(-25deg); animation-delay: 1.4s; }
-        .stream:nth-child(4) { transform: rotate(-12.5deg); animation-delay: 1.6s; }
-        .stream:nth-child(5) { transform: rotate(0deg); animation-delay: 1.8s; }
-        .stream:nth-child(6) { transform: rotate(12.5deg); animation-delay: 2.0s; }
-        .stream:nth-child(7) { transform: rotate(25deg); animation-delay: 2.2s; }
-        .stream:nth-child(8) { transform: rotate(37.5deg); animation-delay: 2.4s; }
-        .stream:nth-child(9) { transform: rotate(50deg); animation-delay: 2.6s; }
+        .stream:nth-child(1) { transform: rotate(-50deg); animation-delay: 1.5s; }
+        .stream:nth-child(2) { transform: rotate(-37.5deg); animation-delay: 1.7s; }
+        .stream:nth-child(3) { transform: rotate(-25deg); animation-delay: 1.9s; }
+        .stream:nth-child(4) { transform: rotate(-12.5deg); animation-delay: 2.1s; }
+        .stream:nth-child(5) { transform: rotate(0deg); animation-delay: 2.3s; }
+        .stream:nth-child(6) { transform: rotate(12.5deg); animation-delay: 2.5s; }
+        .stream:nth-child(7) { transform: rotate(25deg); animation-delay: 2.7s; }
+        .stream:nth-child(8) { transform: rotate(37.5deg); animation-delay: 2.9s; }
+        .stream:nth-child(9) { transform: rotate(50deg); animation-delay: 3.1s; }
 
         .services-grid {
             display: grid;
@@ -264,7 +284,7 @@
                 left: 110px;
                 width: 3px;
             }
-            .grass-front { height: 65px; }
+            .grass-front { height: 70px; }
         }
     </style>
 </head>

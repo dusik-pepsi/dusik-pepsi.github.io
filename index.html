@@ -3,147 +3,664 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Карточка сотрудника</title>
+    <title>Линда | Проектирование автополива</title>
     <style>
-        /* Стили — чтобы было красиво */
+        /* ========== ОСНОВНЫЕ СТИЛИ ========== */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
-            font-family: Arial, Helvetica, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #f8faf8;
+            color: #2d3436;
+            line-height: 1.6;
+        }
+        a {
+            text-decoration: none;
+            color: inherit;
         }
 
-        .card {
+        /* ========== ШАПКА И НАВИГАЦИЯ ========== */
+        header {
             background: white;
-            border-radius: 20px;
-            padding: 40px;
-            max-width: 400px;
-            width: 100%;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .header-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+        }
+        .logo {
+            font-size: 28px;
+            font-weight: 800;
+            color: #2d7d46;
+            letter-spacing: -1px;
+        }
+        .logo span {
+            color: #4a9e6b;
+            font-weight: 300;
+        }
+        nav {
+            display: flex;
+            gap: 30px;
+        }
+        nav a {
+            font-weight: 600;
+            color: #555;
+            transition: 0.3s;
+            padding-bottom: 5px;
+            border-bottom: 2px solid transparent;
+        }
+        nav a:hover,
+        nav a.active {
+            color: #2d7d46;
+            border-bottom-color: #2d7d46;
+        }
+        .hamburger {
+            display: none;
+            font-size: 28px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            color: #2d7d46;
+        }
+
+        /* ========== СТРАНИЦЫ (все на одной HTML-странице) ========== */
+        .page {
+            display: none;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            animation: fadeIn 0.5s ease;
+        }
+        .page.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ========== ГЛАВНАЯ СТРАНИЦА ========== */
+        .hero {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+            align-items: center;
+            margin-bottom: 60px;
+        }
+        .hero-text {
+            flex: 1;
+            min-width: 280px;
+        }
+        .hero-text h1 {
+            font-size: 48px;
+            font-weight: 800;
+            color: #1a3a2b;
+            margin-bottom: 15px;
+            line-height: 1.2;
+        }
+        .hero-text h1 span {
+            color: #2d7d46;
+        }
+        .hero-text p {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 25px;
+        }
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 30px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 16px;
+            transition: 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-primary {
+            background: #2d7d46;
+            color: white;
+        }
+        .btn-primary:hover {
+            background: #236a3a;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(45,125,70,0.3);
+        }
+        .btn-secondary {
+            background: white;
+            color: #2d7d46;
+            border: 2px solid #2d7d46;
+        }
+        .btn-secondary:hover {
+            background: #f0f9f0;
+            transform: translateY(-2px);
+        }
+
+        .hero-visual {
+            flex: 1;
+            min-width: 280px;
             text-align: center;
         }
+        .sprinkler-animation {
+            width: 300px;
+            height: 300px;
+            margin: 0 auto;
+            position: relative;
+        }
+        .sprinkler-base {
+            width: 60px;
+            height: 120px;
+            background: linear-gradient(180deg, #555, #333);
+            border-radius: 5px 5px 10px 10px;
+            margin: 0 auto;
+            position: relative;
+            top: 70px;
+        }
+        .sprinkler-head {
+            width: 80px;
+            height: 30px;
+            background: #666;
+            border-radius: 15px;
+            margin: 0 auto;
+            position: relative;
+            top: -15px;
+            animation: rotateHead 4s infinite linear;
+        }
+        @keyframes rotateHead {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .water-drop {
+            position: absolute;
+            width: 6px;
+            height: 12px;
+            background: linear-gradient(180deg, #4fc3f7, #0288d1);
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            opacity: 0;
+            animation: drop 1.5s infinite;
+        }
+        .water-drop:nth-child(1) { left: 30px; top: 20px; animation-delay: 0s; }
+        .water-drop:nth-child(2) { left: 60px; top: 35px; animation-delay: 0.3s; }
+        .water-drop:nth-child(3) { left: 100px; top: 25px; animation-delay: 0.6s; }
+        .water-drop:nth-child(4) { left: 140px; top: 40px; animation-delay: 0.9s; }
+        .water-drop:nth-child(5) { left: 170px; top: 30px; animation-delay: 1.2s; }
+        .water-drop:nth-child(6) { left: 40px; top: 50px; animation-delay: 0.15s; }
+        .water-drop:nth-child(7) { left: 80px; top: 55px; animation-delay: 0.45s; }
+        .water-drop:nth-child(8) { left: 120px; top: 60px; animation-delay: 0.75s; }
+        .water-drop:nth-child(9) { left: 160px; top: 50px; animation-delay: 1.05s; }
+        .water-drop:nth-child(10) { left: 50px; top: 70px; animation-delay: 0.2s; }
+        .water-drop:nth-child(11) { left: 90px; top: 75px; animation-delay: 0.5s; }
+        .water-drop:nth-child(12) { left: 130px; top: 80px; animation-delay: 0.8s; }
+        .water-drop:nth-child(13) { left: 170px; top: 70px; animation-delay: 1.1s; }
 
-        .avatar {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            background: #667eea;
-            margin: 0 auto 20px;
+        @keyframes drop {
+            0% { transform: translateY(0) scale(1); opacity: 1; }
+            100% { transform: translateY(180px) scale(0.3); opacity: 0; }
+        }
+
+        /* ========== БЛОК УСЛУГ ========== */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin: 40px 0;
+        }
+        .service-card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.05);
+            transition: 0.3s;
+            border-top: 4px solid #2d7d46;
+        }
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+        }
+        .service-card .icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+        }
+        .service-card h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: #1a3a2b;
+        }
+        .service-card p {
+            color: #777;
+            font-size: 15px;
+        }
+
+        /* ========== ПОРТФОЛИО (МУЛЯЖИ) ========== */
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+        .portfolio-item {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.05);
+            transition: 0.3s;
+        }
+        .portfolio-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+        }
+        .portfolio-img {
+            height: 200px;
+            background: #e8f5e9;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 60px;
-            color: white;
-            font-weight: bold;
+            color: #2d7d46;
         }
-
-        h1 {
-            font-size: 28px;
-            color: #333;
-            margin-bottom: 5px;
+        .portfolio-info {
+            padding: 20px;
         }
-
-        .position {
-            color: #667eea;
+        .portfolio-info h3 {
             font-size: 18px;
-            font-weight: bold;
+            margin-bottom: 8px;
+            color: #1a3a2b;
+        }
+        .portfolio-info p {
+            color: #888;
+            font-size: 14px;
+        }
+        .tag {
+            display: inline-block;
+            background: #e8f5e9;
+            color: #2d7d46;
+            padding: 3px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 8px;
+        }
+
+        /* ========== КОНТАКТЫ ========== */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-top: 30px;
+        }
+        .contact-info h2 {
+            font-size: 32px;
+            color: #1a3a2b;
             margin-bottom: 20px;
         }
-
-        .info {
-            text-align: left;
-            background: #f5f7ff;
-            border-radius: 12px;
-            padding: 20px;
-            margin: 20px 0;
+        .contact-info p {
+            color: #666;
+            margin-bottom: 25px;
+            font-size: 18px;
         }
-
-        .info p {
-            margin: 10px 0;
-            color: #555;
-            font-size: 16px;
-        }
-
-        .info span {
-            color: #333;
-            font-weight: bold;
-        }
-
-        .contacts {
+        .contact-buttons {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 15px;
         }
-
-        .contact-item {
-            background: #f5f7ff;
-            border-radius: 10px;
-            padding: 12px 20px;
-            text-decoration: none;
-            color: #333;
-            font-size: 16px;
+        .contact-btn {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 15px;
+            padding: 18px 25px;
+            border-radius: 14px;
+            font-size: 18px;
+            font-weight: 600;
+            transition: 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        .contact-btn.telegram {
+            background: #0088cc;
+            color: white;
+        }
+        .contact-btn.telegram:hover {
+            background: #0077b5;
+            transform: translateX(5px);
+            box-shadow: 0 8px 25px rgba(0,136,204,0.3);
+        }
+        .contact-btn.whatsapp {
+            background: #25D366;
+            color: white;
+        }
+        .contact-btn.whatsapp:hover {
+            background: #1da851;
+            transform: translateX(5px);
+            box-shadow: 0 8px 25px rgba(37,211,102,0.3);
+        }
+        .contact-btn .btn-icon {
+            font-size: 28px;
+        }
+
+        .contact-form {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.05);
+        }
+        .contact-form h3 {
+            font-size: 22px;
+            margin-bottom: 20px;
+            color: #1a3a2b;
+        }
+        .contact-form input,
+        .contact-form textarea {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            font-size: 16px;
+            font-family: inherit;
             transition: 0.3s;
         }
-
-        .contact-item:hover {
-            background: #667eea;
-            color: white;
-            transform: translateY(-2px);
+        .contact-form input:focus,
+        .contact-form textarea:focus {
+            outline: none;
+            border-color: #2d7d46;
+        }
+        .contact-form textarea {
+            height: 120px;
+            resize: vertical;
         }
 
-        .footer {
-            margin-top: 20px;
+        /* ========== ПОДВАЛ ========== */
+        footer {
+            text-align: center;
+            padding: 30px 20px;
             color: #999;
             font-size: 14px;
+            border-top: 1px solid #e0e0e0;
+            margin-top: 40px;
+        }
+
+        /* ========== АДАПТАЦИЯ ПОД ТЕЛЕФОН ========== */
+        @media (max-width: 768px) {
+            .hamburger { display: block; }
+            nav {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 70px;
+                left: 0;
+                right: 0;
+                background: white;
+                padding: 20px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+                gap: 15px;
+            }
+            nav.open { display: flex; }
+            .hero-text h1 { font-size: 34px; }
+            .contact-grid { grid-template-columns: 1fr; }
+            .sprinkler-animation { width: 220px; height: 220px; }
+            .sprinkler-base { width: 40px; height: 80px; top: 50px; }
+            .sprinkler-head { width: 60px; height: 22px; top: -10px; }
+            .water-drop:nth-child(1) { left: 15px; top: 10px; }
+            .water-drop:nth-child(2) { left: 35px; top: 20px; }
+            .water-drop:nth-child(3) { left: 65px; top: 15px; }
+            .water-drop:nth-child(4) { left: 95px; top: 25px; }
+            .water-drop:nth-child(5) { left: 120px; top: 18px; }
+            .water-drop:nth-child(6) { left: 25px; top: 35px; }
+            .water-drop:nth-child(7) { left: 50px; top: 40px; }
+            .water-drop:nth-child(8) { left: 80px; top: 42px; }
+            .water-drop:nth-child(9) { left: 110px; top: 35px; }
+            .water-drop:nth-child(10) { left: 30px; top: 50px; }
+            .water-drop:nth-child(11) { left: 55px; top: 55px; }
+            .water-drop:nth-child(12) { left: 85px; top: 58px; }
+            .water-drop:nth-child(13) { left: 115px; top: 50px; }
         }
     </style>
 </head>
 <body>
-    <div class="card">
-        <!-- Аватар (первая буква имени) -->
-        <div class="avatar">А</div>
-        
-        <!-- Имя и должность -->
-        <h1>Алексей Иванов</h1>
-        <div class="position">Старший разработчик</div>
-        
-        <!-- Основная информация -->
-        <div class="info">
-            <p>🏢 <span>Компания:</span> ООО "ТехноПрогресс"</p>
-            <p>📍 <span>Отдел:</span> Отдел разработки</p>
-            <p>📅 <span>Опыт:</span> 5 лет</p>
-            <p>🆔 <span>Табельный номер:</span> 12345</p>
+
+    <!-- ==================== ШАПКА ==================== -->
+    <header>
+        <div class="header-inner">
+            <div class="logo">Линда<span>Полив</span></div>
+            <button class="hamburger" onclick="toggleMenu()">☰</button>
+            <nav id="nav">
+                <a href="#" class="active" data-page="home">Главная</a>
+                <a href="#" data-page="portfolio">Портфолио</a>
+                <a href="#" data-page="contacts">Контакты</a>
+            </nav>
         </div>
-        
-        <!-- Контакты -->
-        <div class="contacts">
-            <a href="tel:+7-999-123-45-67" class="contact-item">
-                📞 +7 (999) 123-45-67
-            </a>
-            <a href="mailto:aleksey@company.ru" class="contact-item">
-                ✉️ aleksey@company.ru
-            </a>
-            <a href="https://t.me/aleksey_dev" class="contact-item" target="_blank">
-                💬 Telegram
-            </a>
+    </header>
+
+    <!-- ==================== СТРАНИЦА: ГЛАВНАЯ ==================== -->
+    <section class="page active" id="home">
+        <div class="hero">
+            <div class="hero-text">
+                <h1>Проектирую <span>автополив</span><br>для вашего сада</h1>
+                <p>5+ лет опыта. Индивидуальный подход. Скидка на оборудование Hunter.</p>
+                <div class="btn-group">
+                    <a href="#" class="btn btn-primary" onclick="navigateTo('contacts')">
+                        💬 Связаться
+                    </a>
+                    <a href="#" class="btn btn-secondary" onclick="navigateTo('portfolio')">
+                        📸 Примеры работ
+                    </a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="sprinkler-animation">
+                    <div class="sprinkler-base"></div>
+                    <div class="sprinkler-head"></div>
+                    <div class="water-drop"></div>
+                    <div class="water-drop"></div>
+                    <div class="water-drop"></div>
+                    <div class="water-drop"></div>
+                    <div class="water-drop"></div>
+                    <div class="water-drop"></div>
+                    <div class="water-drop"></div>
+                    <div class="water-drop"></div>
+                    <div class="water-drop"></div>
+                    <div class="water-drop"></div>
+                    <div class="water-drop"></div>
+                    <div class="water-drop"></div>
+                </div>
+            </div>
         </div>
-        
-        <!-- Дополнительно -->
-        <div class="footer">
-            Карточка сотрудника · 2024
+
+        <h2 style="font-size:32px; color:#1a3a2b; margin-top:40px;">Что я делаю</h2>
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="icon">📐</div>
+                <h3>Проектирование</h3>
+                <p>Расчёт схемы полива, подбор оборудования, спецификация под ваш участок.</p>
+            </div>
+            <div class="service-card">
+                <div class="icon">🔧</div>
+                <h3>Подбор оборудования</h3>
+                <p>Помогу выбрать насосы, контроллеры и дождеватели Hunter с лучшей ценой.</p>
+            </div>
+            <div class="service-card">
+                <div class="icon">🚜</div>
+                <h3>Монтаж и настройка</h3>
+                <p>Выезд на объект, установка системы, пусконаладка и обучение.</p>
+            </div>
+            <div class="service-card">
+                <div class="icon">🔄</div>
+                <h3>Обслуживание</h3>
+                <p>Сезонное обслуживание, ремонт, модернизация существующих систем.</p>
+            </div>
+            <div class="service-card">
+                <div class="icon">📞</div>
+                <h3>Консультации</h3>
+                <p>Удалённая помощь по проекту, видео-звонки, экспертные рекомендации.</p>
+            </div>
+            <div class="service-card">
+                <div class="icon">🏷️</div>
+                <h3>Скидка на материалы</h3>
+                <p>При заказе проекта — скидка на оборудование Hunter и комплектующие.</p>
+            </div>
         </div>
-    </div>
+
+        <div style="text-align:center; margin: 50px 0;">
+            <p style="font-size:22px; color:#2d7d46; font-weight:600; font-style:italic;">
+                🌱 «Добренько поливаем» — ваш сад скажет спасибо
+            </p>
+        </div>
+    </section>
+
+    <!-- ==================== СТРАНИЦА: ПОРТФОЛИО ==================== -->
+    <section class="page" id="portfolio">
+        <h1 style="font-size:36px; color:#1a3a2b; margin-bottom:10px;">Галерея проектов</h1>
+        <p style="color:#888; margin-bottom:30px;">Нажмите на фото, чтобы посмотреть подробнее (фото добавлю позже)</p>
+
+        <div class="portfolio-grid">
+            <div class="portfolio-item">
+                <div class="portfolio-img">🌿</div>
+                <div class="portfolio-info">
+                    <h3>Участок в Коттеджном посёлке</h3>
+                    <p>Проект автополива для газона и цветников. Площадь — 12 соток.</p>
+                    <span class="tag">Hunter</span>
+                    <span class="tag">Проект</span>
+                </div>
+            </div>
+            <div class="portfolio-item">
+                <div class="portfolio-img">🌳</div>
+                <div class="portfolio-info">
+                    <h3>Сад в частном доме</h3>
+                    <p>Система полива для плодовых деревьев и кустарников. Капельный полив.</p>
+                    <span class="tag">Капельный</span>
+                    <span class="tag">Монтаж</span>
+                </div>
+            </div>
+            <div class="portfolio-item">
+                <div class="portfolio-img">🏨</div>
+                <div class="portfolio-info">
+                    <h3>Отель "Зелёная долина"</h3>
+                    <p>Коммерческий объект. Полив газонов, клумб и живой изгороди.</p>
+                    <span class="tag">Коммерция</span>
+                    <span class="tag">Hunter</span>
+                </div>
+            </div>
+            <div class="portfolio-item">
+                <div class="portfolio-img">🌺</div>
+                <div class="portfolio-info">
+                    <h3>Теплица для фермерского хозяйства</h3>
+                    <p>Автоматический полив для теплицы 200 м² с системой туманообразования.</p>
+                    <span class="tag">Теплица</span>
+                    <span class="tag">Туман</span>
+                </div>
+            </div>
+            <div class="portfolio-item">
+                <div class="portfolio-img">🏡</div>
+                <div class="portfolio-info">
+                    <h3>Дачный участок 6 соток</h3>
+                    <p>Бюджетный проект автополива для газона и огорода.</p>
+                    <span class="tag">Бюджет</span>
+                    <span class="tag">Газон</span>
+                </div>
+            </div>
+            <div class="portfolio-item">
+                <div class="portfolio-img">🌲</div>
+                <div class="portfolio-info">
+                    <h3>Парковая зона ЖК</h3>
+                    <p>Проект полива для общественного пространства. 30 зон полива.</p>
+                    <span class="tag">Городской</span>
+                    <span class="tag">Крупный</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== СТРАНИЦА: КОНТАКТЫ ==================== -->
+    <section class="page" id="contacts">
+        <div class="contact-grid">
+            <div class="contact-info">
+                <h2>Свяжитесь со мной</h2>
+                <p>Напишите в удобный мессенджер — я отвечу быстро и с радостью помогу с проектом!</p>
+                <div class="contact-buttons">
+                    <a href="https://t.me/+79151064652" target="_blank" class="contact-btn telegram">
+                        <span class="btn-icon">✈️</span>
+                        Написать в Telegram
+                    </a>
+                    <a href="https://wa.me/79151064652" target="_blank" class="contact-btn whatsapp">
+                        <span class="btn-icon">💬</span>
+                        Написать в WhatsApp
+                    </a>
+                </div>
+                <p style="margin-top:25px; color:#999; font-size:14px;">
+                    Или позвоните: <strong style="color:#333;">+7 (915) 106-46-52</strong>
+                </p>
+                <p style="color:#999; font-size:14px;">
+                    📍 Москва и Московская область <br>
+                    ✉️ linda.poliv@example.com
+                </p>
+            </div>
+            <div class="contact-form">
+                <h3>📝 Оставьте заявку</h3>
+                <form onsubmit="event.preventDefault(); alert('Спасибо! Я свяжусь с вами в ближайшее время.');">
+                    <input type="text" placeholder="Ваше имя" required>
+                    <input type="tel" placeholder="Номер телефона" required>
+                    <input type="text" placeholder="Площадь участка (соток)">
+                    <textarea placeholder="Опишите задачу..."></textarea>
+                    <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center;">
+                        ✉️ Отправить
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        © 2024 Линда — проектирование автополива. «Добренько поливаем» 🌱
+    </footer>
+
+    <!-- ==================== СКРИПТЫ ==================== -->
+    <script>
+        // Навигация по страницам
+        function navigateTo(pageId) {
+            // Скрываем все страницы
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            // Показываем нужную
+            document.getElementById(pageId).classList.add('active');
+            // Обновляем активный пункт меню
+            document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+            const activeLink = document.querySelector(`nav a[data-page="${pageId}"]`);
+            if (activeLink) activeLink.classList.add('active');
+            // Закрываем меню на телефоне
+            document.getElementById('nav').classList.remove('open');
+            // Прокрутка вверх
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Обработчики для навигации
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const page = this.getAttribute('data-page');
+                navigateTo(page);
+            });
+        });
+
+        // Гамбургер-меню
+        function toggleMenu() {
+            document.getElementById('nav').classList.toggle('open');
+        }
+    </script>
+
 </body>
 </html>

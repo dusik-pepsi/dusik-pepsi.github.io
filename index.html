@@ -1,10 +1,149 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
-    <title>Мой сайт</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Карточка сотрудника</title>
+    <style>
+        /* Стили — чтобы было красиво */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 400px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+
+        .avatar {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: #667eea;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            color: white;
+            font-weight: bold;
+        }
+
+        h1 {
+            font-size: 28px;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .position {
+            color: #667eea;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .info {
+            text-align: left;
+            background: #f5f7ff;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .info p {
+            margin: 10px 0;
+            color: #555;
+            font-size: 16px;
+        }
+
+        .info span {
+            color: #333;
+            font-weight: bold;
+        }
+
+        .contacts {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .contact-item {
+            background: #f5f7ff;
+            border-radius: 10px;
+            padding: 12px 20px;
+            text-decoration: none;
+            color: #333;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: 0.3s;
+        }
+
+        .contact-item:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .footer {
+            margin-top: 20px;
+            color: #999;
+            font-size: 14px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Привет, мир!</h1>
-    <p>Сайт работает</p>
+    <div class="card">
+        <!-- Аватар (первая буква имени) -->
+        <div class="avatar">А</div>
+        
+        <!-- Имя и должность -->
+        <h1>Алексей Иванов</h1>
+        <div class="position">Старший разработчик</div>
+        
+        <!-- Основная информация -->
+        <div class="info">
+            <p>🏢 <span>Компания:</span> ООО "ТехноПрогресс"</p>
+            <p>📍 <span>Отдел:</span> Отдел разработки</p>
+            <p>📅 <span>Опыт:</span> 5 лет</p>
+            <p>🆔 <span>Табельный номер:</span> 12345</p>
+        </div>
+        
+        <!-- Контакты -->
+        <div class="contacts">
+            <a href="tel:+7-999-123-45-67" class="contact-item">
+                📞 +7 (999) 123-45-67
+            </a>
+            <a href="mailto:aleksey@company.ru" class="contact-item">
+                ✉️ aleksey@company.ru
+            </a>
+            <a href="https://t.me/aleksey_dev" class="contact-item" target="_blank">
+                💬 Telegram
+            </a>
+        </div>
+        
+        <!-- Дополнительно -->
+        <div class="footer">
+            Карточка сотрудника · 2024
+        </div>
+    </div>
 </body>
 </html>
